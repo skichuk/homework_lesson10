@@ -1,7 +1,47 @@
 from flask import Flask
-import json
+from utils import get_all, get_by_pk, get_by_skill, load_candidates
 
-with open('candidates.json', 'r', encoding='utf-8') as file:
-    data = json.load(file)
+FILEPATH = 'candidates.json'
+
+data = load_candidates(FILEPATH)
+
+candidates_list = get_all(data)
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def page_index():
+    candidates_string = '<pre>'
+    for item in candidates_list:
+        candidates_string += f'{item}\n\n'
+    candidates_string += '</pre>'
+    return candidates_string
+
+
+@app.route('/candidates/<int:pk>/')
+def get_candidate(pk):
+    candidate = get_by_pk(pk, candidates_list)
+    if candidate:
+        candidate_info = f'img src = "{candidate.picture}"'
+        candidate_info += f'<pre> {candidate} </pre>'
+    else:
+        candidate = 'NOT FOUND'
+    return candidate
+
+
+@app.route('/skills/<x>/')
+def get_skills(x):
+    users = get_by_skill(x, candidates_list)
+    if users:
+        candidates_string = '<pre>'
+        for item in candidates_list:
+            candidates_string += f'{item}\n\n'
+        candidates_string += '</pre>'
+    else:
+        candidates_string = "NOT FOUND"
+    return candidates_string
+
+
+if __name__ == '__main__':
+    app.run(port=5000)
