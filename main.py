@@ -30,9 +30,9 @@ def get_candidate(pk):
     return candidate
 
 
-@app.route('/skills/<x>/')
-def get_skills(x):
-    users = get_by_skill(x, candidates_list)
+@app.route('/skills/<skill>/')
+def get_skills(skill):
+    users = get_by_skill(skill, candidates_list)
     if users:
         candidates_string = '<pre>'
         for item in candidates_list:
