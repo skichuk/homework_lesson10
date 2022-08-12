@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def page_index():
-    candidates_string = '<pre>'
+    candidates_string = '<pre>' + '\n'
     for item in candidates_list:
         candidates_string += f'{item}\n\n'
     candidates_string += '</pre>'
@@ -23,11 +23,11 @@ def page_index():
 def get_candidate(pk):
     candidate = get_by_pk(pk, candidates_list)
     if candidate:
-        candidate_info = f'img src = "{candidate.picture}"'
+        candidate_info = f'<img src = "{candidate.picture}">'
         candidate_info += f'<pre> {candidate} </pre>'
     else:
-        candidate = 'NOT FOUND'
-    return candidate
+        candidate_info = 'NOT FOUND'
+    return candidate_info
 
 
 @app.route('/skills/<skill>/')
@@ -35,7 +35,7 @@ def get_skills(skill):
     users = get_by_skill(skill, candidates_list)
     if users:
         candidates_string = '<pre>'
-        for item in candidates_list:
+        for item in users:
             candidates_string += f'{item}\n\n'
         candidates_string += '</pre>'
     else:
